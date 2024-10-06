@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Speeds and HTTPS Packet Monitoring Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        #graph-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+        #mode-selector {
+            margin: 20px;
+        }
+        #packet-info {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div id="mode-selector">
+        <button onclick="switchMode('speed')">WiFi Speed</button>
+        <button onclick="switchMode('httpsPackets')">HTTPS Packets</button>
+    </div>
+    <div id="graph-container">
+        <canvas id="dataChart"></canvas>
+    </div>
+    <div id="packet-info">
+        <h2>HTTPS Packet Information</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Packet Count</th>
+                    <th>Name</th> <!-- New column for names -->
+                </tr>
+            </thead>
+            <tbody id="packet-table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Sample sources with IP and name information
+        const sources = [
+            { ip: '192.168.1.1', name: 'Device A' },
+            { ip: '192.168.1.2', name: 'Device B' },
+            { ip: '192.168.1.3', name: 'Device C' },
+            { ip: '192.168.1.4', name: 'Device D' },
+            { ip: '192.168.1.5', name: 'Device E' }
+        ];
+
+        // Initial data
+        let data = Array(10).fill().map(() => ({
+            speed: Math.floor(Math.random() * 100) + 1,
+            httpsPackets: Math.floor(Math.random() * 500) + 1,
+            source: sources[Math.floor(Math.random() * sources.length)]
+        }));
+
+        // Extracting speed and HTTPS packet data
+        const speeds = data.map(entry => entry.speed);
+        const httpsPackets = data.map(entry => entry.httpsPackets);
+
+        // Creating the chart
+        const ctx = document.getElementById('dataChart').getContext('2d');
+        let dataChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(10).fill(''), // Placeholder labels
+                datasets: [{
+                    label: 'WiFi Speed (Mbps)',
+                    data: speeds,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true,
+                    tension: 0.4 // Increased tension for smoother lines
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: false // Hide x-axis labels
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        let currentMode = 'speed';
+
+        // Function to simulate fetching new data
+        function fetchNewData() {
+            const newSpeed = Math.floor(Math.random() * 100) + 1; // Random speed between 1 and 100
+            const newHttpsPackets = Math.floor(Math.random() * 500) + 1; // Random HTTPS packet count between 1 and 500
+            const newSource = sources[Math.floor(Math.random() * sources.length)]; // Random source
+
+            data.push({ speed: newSpeed, httpsPackets: newHttpsPackets, source: newSource });
+
+            // Keep only the last 10 entries for the graph
+            if (data.length > 10) {
+                data.shift();
+            }
+
+            // Update the chart and packet table
+            updateChart();
+            updatePacketTable();
+        }
+
+        // Function to update the chart with new data
+        function updateChart() {
+            if (currentMode === 'speed') {
+                dataChart.data.datasets[0].data = data.map(entry => entry.speed);
+                dataChart.data.datasets[0].label = 'WiFi Speed (Mbps)';
+                document.getElementById('packet-info').style.display = 'none';
+            } else if (currentMode === 'httpsPackets') {
+                dataChart.data.datasets[0].data = data.map(entry => entry.httpsPackets);
+                dataChart.data.datasets[0].label = 'HTTPS Packet Count';
+                document.getElementById('packet-info').style.display = 'block';
+            }
+            dataChart.update();
+        }
+
+        // Function to update the packet table with new data
+        function updatePacketTable() {
+            const tbody = document.getElementById('packet-table-body');
+            tbody.innerHTML = '';
+            data.forEach(entry => {
+                const row = document.createElement('tr');
+                const sourceCell = document.createElement('td');
+                sourceCell.textContent = entry.source.ip; // Displaying IP address
+                const packetCell = document.createElement('td');
+                packetCell.textContent = entry.httpsPackets;
+                const nameCell = document.createElement('td');
+                nameCell.textContent = resolveName(entry.source.ip); // Resolving and displaying name associated with IP
+                row.appendChild(sourceCell);
+                row.appendChild(packetCell);
+                row.appendChild(nameCell);
+                tbody.appendChild(row);
+            });
+        }
+
+        // Simulated DNS resolution function (replace with actual backend API call in real application)
+        function resolveName(ip) {
+            const source = sources.find(source => source.ip === ip);
+            return source ? source.name : 'Unknown'; // Return the name associated with the IP, or 'Unknown' if not found
+        }
+
+        // Function to switch between modes
+        function switchMode(mode) {
+            currentMode = mode;
+            updateChart();
+        }
+
+        // Update the graph every 1 second
+        setInterval(fetchNewData, 1000);
+    </script>
+</body>
+</html>
