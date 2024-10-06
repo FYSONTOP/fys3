@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202020;
+            color: #ffffff;
+        }
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #292929;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 300px;
+        }
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .menu-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #ff9800;
+        }
+        .menu-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .menu-option {
+            background-color: #383838;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .menu-option:hover {
+            background-color: #4c4c4c;
+        }
+        .download-button, .extra-button {
+            position: fixed;
+            right: 20px;
+            background-color: #ff9800;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .download-button:hover, .extra-button:hover {
+            background-color: #e58900;
+        }
+        .info-button {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            background-color: #ff9800;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .info-button:hover {
+            background-color: #e58900;
+        }
+        .info-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #292929;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+        .info-popup h2 {
+            margin-top: 0;
+        }
+        .info-popup p {
+            margin-bottom: 20px;
+        }
+        .close-popup {
+            background-color: #ff9800;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .close-popup:hover {
+            background-color: #e58900;
+        }
+        .shortcut-button {
+            width: 50px;
+            height: 50px;
+            background-color: #ff9800;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px auto;
+        }
+        .shortcut-button:hover {
+            background-color: #e58900;
+        }
+        .shortcut {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .shortcut-name {
+            margin-left: 10px;
+        }
+        .long-button {
+            /* This button is removed */
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <div class="menu-header">
+            <h1>FYS MENU</h1>
+        </div>
+        <div class="menu-options">
+            <div class="menu-option" id="option1" title="Access SensoBypass tools and options">SensoBypass</div>
+            <div class="menu-option" id="option2" title="Browse available games">Games</div>
+            <div class="menu-option" id="option3" title="Explore hacking resources">Hacking</div>
+            <div class="menu-option" id="option4" title="Discover AI-related content">Ai</div>
+            <div class="menu-option" id="option5" title="Learn about computer viruses">Viruses</div>
+            <div class="menu-option" id="option6" title="Check out other tools and options">Other</div>
+        </div>
+        <div class="shortcut-button" id="addShortcutButton" title="Add a new shortcut">+</div>
+        <div id="shortcutContainer"></div>
+    </div>
+
+    <button class="download-button" id="download-button" title="Download Gyatt-Mode from GitHub" style="bottom: 130px;">Download</button>
+    <button class="extra-button" id="message-button" title="Get extra hacking tools" style="bottom: 90px;">NOT DONE</button>
+    <button class="extra-button" id="google-slides-button" title="View exploit slides on Google Slides" style="bottom: 50px;">Back To Simple Mode</button>
+    <button class="extra-button" id="hidden-iframe-button" title="Open hidden iframe" style="bottom: 10px;">Hide</button>
+    <button class="info-button" id="info-button" title="Get more information about this menu">Info</button>
+
+    <div class="info-popup" id="info-popup">
+        <h2>Info</h2>
+        <p>Welcome to the sixth release of Gyatt-Mode (idk lol) this will continue to be updated from FYS</p>
+        <button class="close-popup" id="close-popup">X</button>
+    </div>
+    <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+    <script>
+        // Assume you have a list to hold the shortcuts
+        let shortcuts = [];
+
+        // Function to add a shortcut
+        function addShortcut(name, url) {
+            shortcuts.push({ name, url });
+            displayShortcuts();
+        }
+
+        // Function to display shortcuts
+        function displayShortcuts() {
+            const shortcutContainer = document.getElementById('shortcutContainer');
+            shortcutContainer.innerHTML = '';
+            shortcuts.forEach(shortcut => {
+                const faviconURL = `https://s2.googleusercontent.com/s2/favicons?domain=${shortcut.url}`;
+                const shortcutElement = document.createElement('div');
+                shortcutElement.classList.add('shortcut');
+                shortcutElement.innerHTML = `
+                    <img src="${faviconURL}" alt="favicon" width="20" height="20">
+                    <div class="shortcut-name">${shortcut.name}</div>
+                `;
+                shortcutElement.addEventListener('click', () => {
+                    window.location.href = shortcut.url;
+                });
+                shortcutContainer.appendChild(shortcutElement);
+            });
+        }
+
+        // Function to prompt for adding a new shortcut
+        document.getElementById('addShortcutButton').addEventListener('click', () => {
+            const name = prompt('Enter the name for the shortcut:');
+            const url = prompt('Enter the URL for the shortcut:');
+            if (name && url) {
+                addShortcut(name, url);
+            }
+        });
+
+        // Your existing JavaScript code
+
+        // Event listeners for menu options
+        document.getElementById("option1").addEventListener("click", function() {
+            window.location.href = "SensoBypass.html";
+        });
+        document.getElementById("option2").addEventListener("click", function() {
+            window.location.href = "Games.html";
+        });
+        document.getElementById("option3").addEventListener("click", function() {
+            window.location.href = "Hacking.html";
+        });
+        document.getElementById("option4").addEventListener("click", function() {
+            window.location.href = "Ai.html";
+        });
+        document.getElementById("option5").addEventListener("click", function() {
+            window.location.href = "Viruses.html";
+        });
+        document.getElementById("option6").addEventListener("click", function() {
+            window.location.href = "Other.html";
+        });
+
+        // Your existing event listeners for buttons
+
+        // Event listener for the download button
+        document.getElementById("download-button").addEventListener("click", function() {
+            window.open("https://github.com/FYSONTOP/fys-gyatt-mode7", "_blank");
+        });
+
+        // Event listener for the extra hacking tools button
+        document.getElementById("message-button").addEventListener("click", function() {
+            alert("NOT DONE");
+        });
+
+        // Event listener for the exploit slides button
+        document.getElementById("google-slides-button").addEventListener("click", function() {
+            window.open("https://fysontop.github.io/fys-gyatt-mode7/menu.html");
+        });
+
+        // Event listener for the hidden iframe button
+        document.getElementById("hidden-iframe-button").addEventListener("click", function() {
+            var url = "https://fysontop.github.io/fys-gyatt-mode7/";
+            var win;
+            if (win) {
+                win.focus();
+            } else {
+                win = window.open();
+                win.document.body.style.margin = '0';
+                win.document.body.style.height = '100vh';
+                var iframe = win.document.createElement('iframe');
+                iframe.style.border = 'none';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.margin = '0';
+                iframe.src = url;
+                win.document.body.appendChild(iframe);
+            }
+            document.getElementById("hidden-iframe-button").style.background = 'grey';
+            document.getElementById("hidden-iframe-button").innerHTML = "ITS OPEN";
+        });
+
+        // Event listener for the info button
+        document.getElementById("info-button").addEventListener("click", function() {
+            document.getElementById("info-popup").style.display = "block";
+        });
+
+        // Event listener for the close popup button
+        document.getElementById("close-popup").addEventListener("click", function() {
+            document.getElementById("info-popup").style.display = "none";
+        });
+
+        // Stats.js code
+        var stats = new Stats();
+        document.body.appendChild(stats.dom);
+        function loop() {
+            stats.update();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>
