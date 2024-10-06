@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202020;
+            color: #ffffff;
+        }
+
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #292929;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 300px;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #ff9800;
+        }
+
+        .menu-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .menu-option {
+            background-color: #383838;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-option:hover {
+            background-color: #4c4c4c;
+        }
+
+        /* Additional styles for the buttons */
+        .menu-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .menu-buttons button {
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-buttons button:hover {
+            background-color: #ffa726;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <div class="menu-header">
+            <h1>FYS MENU</h1>
+        </div>
+        <div class="menu-options">
+            <div class="menu-option" id="option1">SensoBypass</div>
+            <div class="menu-option" id="option2">Games</div>
+            <div class="menu-option" id="option3">Hacking</div>
+            <div class="menu-option" id="option4">Ai</div>
+            <div class="menu-option" id="option5">Viruses</div>
+            <div class="menu-option" id="option6">Other</div>
+			<div class="menu-option" id="option7">Advanced mode</div>
+        </div>
+        <!-- Additional buttons -->
+        <div class="menu-buttons">
+            <button onclick="goToMenu('menu.html')">&lt;</button>
+            <button onclick="goToMenu('menu2.html')">&gt;</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to navigate to menu.html or menu3.html
+        function goToMenu(url) {
+            window.location.href = url;
+        }
+
+        // Event listeners for menu options
+        document.getElementById("option1").addEventListener("click", function() {
+            window.location.href = "SensoBypass.html";
+        });
+        document.getElementById("option2").addEventListener("click", function() {
+            window.location.href = "Games.html";
+        });
+        document.getElementById("option3").addEventListener("click", function() {
+            window.location.href = "Hacking.html";
+        });
+        document.getElementById("option4").addEventListener("click", function() {
+            window.location.href = "Ai.html";
+        });
+        document.getElementById("option5").addEventListener("click", function() {
+            window.location.href = "Viruses.html";
+        });
+        document.getElementById("option6").addEventListener("click", function() {
+            window.location.href = "Other.html";
+        });
+		document.getElementById("option7").addEventListener("click", function() {
+            window.location.href = "menu0.html";
+        });
+    </script>
+</body>
+</html>

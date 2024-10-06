@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block Senso Requests</title>
+</head>
+<body>
+  <h1>Service Worker to Block Senso Requests</h1>
+  <p>If you try to fetch any resource containing "senso" in its URL, it will be blocked.</p>
+
+  <script>
+    // Service Worker Script
+    const swScript = `
+      self.addEventListener('fetch', event => {
+        const url = new URL(event.request.url);
+        
+        if (url.hostname.includes('senso')) {
+          event.respondWith(
+            new Response('Blocked by service worker', {
+              status: 403,
+              statusText: 'Forbidden'
+            })
+          );
+        } else {
+          event.respondWith(fetch(event.request));
+        }
+      });
+    `;
+
+    // Create a Blob with the Service Worker script
+    const blob = new Blob([swScript], { type: 'application/javascript' });
+    const swURL = URL.createObjectURL(blob);
+
+    // Register the Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(swURL).then(function(registration) {
+        console.log('Service Worker registered with scope:', registration.scope);
+      }).catch(function(error) {
+        console.log('Service Worker registration failed:', error);
+      });
+    } else {
+      console.log('Service Workers are not supported in this browser.');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device and Network Information with Permissions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .info-section {
+            margin-bottom: 20px;
+        }
+        .info-section h2 {
+            margin-bottom: 10px;
+        }
+        .info-section p {
+            margin: 5px 0;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+</head>
+<body>
+    <h1>Device and Network Information with Permissions</h1>
+
+    <div class="info-section" id="device-info">
+        <h2>Device Information</h2>
+        <p id="user-agent"></p>
+        <p id="platform"></p>
+        <p id="language"></p>
+        <p id="screen-resolution"></p>
+        <p id="color-depth"></p>
+        <p id="timezone"></p>
+        <p id="cookies-enabled"></p>
+    </div>
+
+    <div class="info-section" id="network-info">
+        <h2>Network Information</h2>
+        <p id="connection-type"></p>
+        <p id="effective-type"></p>
+        <p id="downlink"></p>
+        <p id="rtt"></p>
+    </div>
+
+    <div class="info-section" id="geolocation-info">
+        <h2>Geolocation Information</h2>
+        <p id="latitude"></p>
+        <p id="longitude"></p>
+        <p id="altitude"></p>
+        <p id="accuracy"></p>
+        <p id="altitude-accuracy"></p>
+        <p id="heading"></p>
+        <p id="speed"></p>
+        <div id="map"></div>
+    </div>
+
+    <div class="info-section" id="ip-info">
+        <h2>IP and Country Information</h2>
+        <p id="ip-address"></p>
+        <p id="country"></p>
+    </div>
+
+    <div class="info-section" id="speed-info">
+        <h2>Network Speed Test</h2>
+        <p id="download-speed"></p>
+    </div>
+
+    <div class="info-section" id="permissions-info">
+        <h2>Permissions Information</h2>
+        <p id="geolocation-permission"></p>
+        <p id="notifications-permission"></p>
+        <p id="camera-permission"></p>
+        <p id="microphone-permission"></p>
+    </div>
+
+    <script>
+        // Device Information
+        document.getElementById('user-agent').textContent = 'User Agent: ' + navigator.userAgent;
+        document.getElementById('platform').textContent = 'Platform: ' + navigator.platform;
+        document.getElementById('language').textContent = 'Language: ' + navigator.language;
+        document.getElementById('screen-resolution').textContent = 'Screen Resolution: ' + screen.width + 'x' + screen.height;
+        document.getElementById('color-depth').textContent = 'Color Depth: ' + screen.colorDepth;
+        document.getElementById('timezone').textContent = 'Timezone: ' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById('cookies-enabled').textContent = 'Cookies Enabled: ' + navigator.cookieEnabled;
+
+        // Network Information
+        if (navigator.connection) {
+            document.getElementById('connection-type').textContent = 'Connection Type: ' + navigator.connection.type;
+            document.getElementById('effective-type').textContent = 'Effective Type: ' + navigator.connection.effectiveType;
+            document.getElementById('downlink').textContent = 'Downlink: ' + navigator.connection.downlink + ' Mbps';
+            document.getElementById('rtt').textContent = 'RTT: ' + navigator.connection.rtt + ' ms';
+        } else {
+            document.getElementById('network-info').textContent = 'Network Information: Not available';
+        }
+
+        // Geolocation Information and Google Maps
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById('latitude').textContent = 'Latitude: ' + position.coords.latitude;
+                document.getElementById('longitude').textContent = 'Longitude: ' + position.coords.longitude;
+                document.getElementById('altitude').textContent = 'Altitude: ' + (position.coords.altitude !== null ? position.coords.altitude : 'Not available');
+                document.getElementById('accuracy').textContent = 'Accuracy: ' + position.coords.accuracy + ' meters';
+                document.getElementById('altitude-accuracy').textContent = 'Altitude Accuracy: ' + (position.coords.altitudeAccuracy !== null ? position.coords.altitudeAccuracy : 'Not available') + ' meters';
+                document.getElementById('heading').textContent = 'Heading: ' + (position.coords.heading !== null ? position.coords.heading : 'Not available');
+                document.getElementById('speed').textContent = 'Speed: ' + (position.coords.speed !== null ? position.coords.speed : 'Not available');
+                
+                // Initialize Google Maps
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                    zoom: 15
+                });
+                var marker = new google.maps.Marker({
+                    position: { lat: position.coords.latitude, lng: position.coords.longitude },
+                    map: map
+                });
+            }, function(error) {
+                document.getElementById('geolocation-info').textContent = 'Geolocation Information: ' + error.message;
+            });
+        } else {
+            document.getElementById('geolocation-info').textContent = 'Geolocation Information: Not available';
+        }
+
+        // IP Address and Country Information
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip-address').textContent = 'IP Address: ' + data.ip;
+                document.getElementById('country').textContent = 'Country: ' + data.country_name;
+            })
+            .catch(error => {
+                document.getElementById('ip-info').textContent = 'IP and Country Information: ' + error.message;
+            });
+
+        // Network Speed Test
+        const image = new Image();
+        const startTime = new Date().getTime();
+        image.src = "https://via.placeholder.com/1000x1000.jpg?random=" + startTime; // Use a placeholder image for the speed test
+        image.onload = function() {
+            const endTime = new Date().getTime();
+            const duration = (endTime - startTime) / 1000;
+            const imageSize = 1000 * 1000 * 24 / 8; // 1000x1000 image with 24-bit color depth
+            const speedBps = (imageSize / duration).toFixed(2);
+            const speedKbps = (speedBps / 1024).toFixed(2);
+            const speedMbps = (speedKbps / 1024).toFixed(2);
+            document.getElementById('download-speed').textContent = 'Download Speed: ' + speedMbps + ' Mbps';
+        };
+
+        // Permissions Information
+        function checkPermission(name, elementId) {
+            navigator.permissions.query({ name: name }).then(function(permissionStatus) {
+                document.getElementById(elementId).textContent = name.charAt(0).toUpperCase() + name.slice(1) + ' Permission: ' + permissionStatus.state;
+                permissionStatus.onchange = function() {
+                    document.getElementById(elementId).textContent = name.charAt(0).toUpperCase() + name.slice(1) + ' Permission: ' + this.state;
+                };
+            });
+        }
+
+        checkPermission('geolocation', 'geolocation-permission');
+        checkPermission('notifications', 'notifications-permission');
+        checkPermission('camera', 'camera-permission');
+        checkPermission('microphone', 'microphone-permission');
+    </script>
+</body>
+</html>
