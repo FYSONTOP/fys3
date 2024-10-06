@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Menu</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202020;
+            color: #ffffff;
+        }
+
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #292929;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 300px;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #ff9800;
+        }
+
+        .menu-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .menu-option {
+            background-color: #383838;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-option:hover {
+            background-color: #4c4c4c;
+        }
+    </style>
+    <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+</head>
+<body>
+    <div class="menu">
+        <div class="menu-header">
+            <h1>Other Menu</h1>
+        </div>
+        <div class="menu-options">
+            <div class="menu-option" id="option1">Nitro</div>
+            <div class="menu-option" id="option2">Pranx</div>
+            <!-- New Menu Option for Fluid -->
+            <div class="menu-option" id="option3">Fluid</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("option1").addEventListener("click", function() {
+            window.location.href = "Nitro.html";
+        });
+
+        document.getElementById("option2").addEventListener("click", function() {
+            window.open("https://pranx.com/", "_blank");
+        });
+
+        // Event listener for Fluid option
+        document.getElementById("option3").addEventListener("click", function() {
+            window.open("https://seraph.reveriestudios.online/apps/fluidsim/index.html", "_blank");
+        });
+
+        var stats = new Stats();
+        document.body.appendChild(stats.dom);
+        function loop() {
+            stats.update();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>

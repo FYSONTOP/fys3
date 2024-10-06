@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Code Checker</title>
+<script>
+  // Discord webhook URLs
+  const successfulWebhookURL = "YOUR_SUCCESSFUL_WEBHOOK_URL";
+  const failedWebhookURL = "YOUR_FAILED_WEBHOOK_URL";
+
+  // Function to generate a random alphanumeric string
+  function generateRandomString(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
+  // Function to send a GET request to Discord API and handle response
+  function sendRequestAndHandleResponse(code, row) {
+    const url = `https://discordapp.com/api/v9/entitlements/gift-codes/${code}?with_application=false&with_subscription_plan=true`;
+    fetch(url)
+      .then(response => {
+        if (response.status === 200) {
+          // If the request is successful, mark the row as successful
+          row.innerHTML += "<td>Success</td>";
+          sendToWebhook(successfulWebhookURL, code);
+        } else {
+          // If the request fails, mark the row as failed
+          row.innerHTML += "<td>Failed</td>";
+          sendToWebhook(failedWebhookURL, code);
+        }
+      })
+      .catch(error => {
+        // If there's an error, mark the row as failed
+        row.innerHTML += "<td>Error</td>";
+        sendToWebhook(failedWebhookURL, code);
+        console.error('Error:', error);
+      });
+  }
+
+  // Function to send the code to Discord webhook
+  function sendToWebhook(webhookURL, code) {
+    const payload = {
+      content: `New gift code generated: ${code}`
+    };
+
+    fetch(webhookURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(response => console.log('Webhook sent:', response))
+    .catch(error => console.error('Error sending webhook:', error));
+  }
+
+  // Function to continuously generate codes and send requests
+  function generateAndSendCodes() {
+    const codeLength = 18;
+    const table = document.getElementById("codeTable");
+    setInterval(() => {
+      const code = generateRandomString(codeLength);
+      const row = table.insertRow(-1);
+      row.innerHTML = `<td>${code}</td>`;
+      sendRequestAndHandleResponse(code, row);
+    }, 5000); // Adjust interval as needed (in milliseconds)
+  }
+
+  // Start generating and sending codes when the page loads
+  window.onload = generateAndSendCodes;
+</script>
+</head>
+<body>
+  <h1>Gift Code Checker</h1>
+  <p>This page generates random alphanumeric strings and checks them against a Discord API, displaying the result in a table.</p>
+  <table id="codeTable">
+    <tr>
+      <th>Code</th>
+      <th>Status</th>
+    </tr>
+  </table>
+</body>
+</html>

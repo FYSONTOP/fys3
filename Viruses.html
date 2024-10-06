@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viruses Menu</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202020;
+            color: #ffffff;
+        }
+
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #292929;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 300px;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #ff9800;
+        }
+
+        .menu-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .menu-option {
+            background-color: #383838;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-option:hover {
+            background-color: #4c4c4c;
+        }
+    </style>
+    <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+</head>
+<body>
+    <div class="menu">
+        <div class="menu-header">
+            <h1>Viruses Menu</h1>
+        </div>
+        <div class="menu-options">
+            <div class="menu-option" id="option1">You Are An Idiot</div>
+            <div class="menu-option" id="option2">CookieClicker.zip</div>
+            <div class="menu-option" id="option3">Ransom</div>
+            <div class="menu-option" id="option4">menu-option</div>
+            <div class="menu-option" id="option5">menu-option</div>
+            <div class="menu-option" id="option6">menu-option</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("option1").addEventListener("click", function() {
+            window.location.href = "https://youareanidiot.cc/";
+        });
+
+        document.getElementById("option2").addEventListener("click", function() {
+            // Download the .zip file
+            var link = document.createElement("a");
+            link.href = "CookieClicker.zip"; // Assuming the file name is "CookieClicker.zip"
+            link.download = "CookieClicker.zip";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        document.getElementById("option3").addEventListener("click", function() {
+            window.location.href = "https://fysontop.github.io/ransom/";
+        });
+
+        // You can add similar event listeners for more options if needed.
+
+        var stats = new Stats();
+        document.body.appendChild(stats.dom);
+        function loop() {
+            stats.update();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>

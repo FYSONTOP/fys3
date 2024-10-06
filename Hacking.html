@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Menu</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202020;
+            color: #ffffff;
+        }
+
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #292929;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 300px;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #ff9800;
+        }
+
+        .menu-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .menu-option {
+            background-color: #383838;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-option:hover {
+            background-color: #4c4c4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <div class="menu-header">
+            <h1>Hacking Menu</h1>
+        </div>
+        <div class="menu-options">
+            <div class="menu-option" id="option1">GeoSpy</div>
+            <div class="menu-option" id="option2">Insecam</div>
+            <div class="menu-option" id="option3">Sandbox Browser</div>
+            <div class="menu-option" id="option4">Kahoot Hack</div>
+            <div class="menu-option" id="option5">Ddos</div>
+            <div class="menu-option" id="option6">Hack 6</div>
+            <div class="menu-option" id="option7">Flooder</div>
+            <div class="menu-option" id="minecraft">Minecraft with hacks</div>
+            <div class="menu-option" id="vpn">VPN</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("option1").addEventListener("click", function() {
+            window.location.href = "https://geospy.web.app/";
+        });
+
+        document.getElementById("option2").addEventListener("click", function() {
+            window.location.href = "https://insecam.org/";
+        });
+
+        document.getElementById("option3").addEventListener("click", function() {
+            window.location.href = "https://sandbox.browser.networkchuck.com/#/cast/kali-sandbox";
+        });
+
+        document.getElementById("option4").addEventListener("click", function() {
+            window.location.href = "https://kahoot.club/";
+        });
+
+        document.getElementById("option5").addEventListener("click", function() {
+            window.location.href = "Ddos.html";
+        });
+
+        document.getElementById("option6").addEventListener("click", function() {
+            // Handle option 6
+        });
+
+        document.getElementById("option7").addEventListener("click", function() {
+            var num = prompt("How many times do you want this page to show up in your history?\nDeveloped By: Schoolcheats on YT");
+            var done = false;
+            var x = window.location.href;
+            for (var i = 1; i <= num; i++) {
+                history.pushState(0, 0, i == num ? x : i.toString());
+                if (i == num) {
+                    done = true;
+                }
+            }
+            if (done === true) {
+                alert("Flooding Successful!\n" + window.location.href + "\nIs now in your history " + num + (num == 1 ? " time." : " times.\nDeveloped By: Schoolcheats on YT"));
+            }
+        });
+
+        document.getElementById("minecraft").addEventListener("click", function() {
+            window.location.href = "mine.html";
+        });
+
+        document.getElementById("vpn").addEventListener("click", function() {
+            window.location.href = "https://github.com/theBlaize/School-VPN";
+        });
+    </script>
+</body>
+</html>

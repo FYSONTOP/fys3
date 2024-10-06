@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FYS SENSO BYPASS</title>
+<link rel="icon" type="image/png" href="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fmiddle-finger-skeleton&psig=AOvVaw16actB2YMC_IUiEYAAhbhU&ust=1716659633042000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLCYztrtpoYDFQAAAAAdAAAAABAE">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+body {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    background-color: black;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(3rem, 10vw, 10rem);
+    color: white;
+    padding: 0 clamp(1rem, 2vw, 3rem);
+    border-radius: clamp(0.4rem, 0.75vw, 1rem);
+    z-index: 1; /* Ensure the text is above other elements */
+    position: relative; /* Enable z-index */
+}
+
+h1:hover {
+    background-color: white;
+    color: black;
+}
+
+button.big-button,
+button.small-button {
+    width: 300px;
+    height: 80px;
+    font-size: 28px;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 15px;
+}
+
+button.big-button:before,
+button.small-button:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 15px;
+}
+
+button.big-button:active,
+button.small-button:active {
+    color: #000
+}
+
+button.big-button:active:after,
+button.small-button:active:after {
+    background: transparent;
+}
+
+button.big-button:hover:before,
+button.small-button:hover:before {
+    opacity: 1;
+}
+
+button.big-button:after,
+button.small-button:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    left: 0;
+    top: 0;
+    border-radius: 15px;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+.small-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 28px; /* Adjust font size */
+    background-color: #111;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.small-button:hover {
+    background-color: #444;
+}
+</style>
+</head>
+<body>
+<h1 data-value="SENSO BYPASS">SENSO BYPASS</h1>
+
+<!-- Big button in the middle -->
+<button class="big-button" id="big-button">Incognito</button>
+
+<!-- Small button beneath the big button -->
+<button class="small-button" id="small-button">Incognito Custom</button>
+
+<!-- Input box for URL -->
+<input type="text" id="urlInput" placeholder="Enter URL" style="display: none;">
+
+<script>
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+let interval = null;
+document.querySelector("h1").onmouseover = event => {
+    let iteration = 0;
+    clearInterval(interval);
+    interval = setInterval(() => {
+        event.target.innerText = event.target.innerText
+        .split("")
+        .map((letter, index) => {
+            if(index < iteration) {
+                return event.target.dataset.value[index];
+            }
+            return letters[Math.floor(Math.random() * 26)]
+        })
+        .join("");
+        if(iteration >= event.target.dataset.value.length){
+            clearInterval(interval);
+        }
+        iteration += 1 / 3;
+    }, 30);
+};
+
+document.getElementById('big-button').onclick = function() {
+    var url = "https://quizlet.gq/";
+    var win;
+    if (win) {
+        win.focus();
+    } else {
+        win = window.open();
+        win.document.body.style.margin = '0';
+        win.document.body.style.height = '100vh';
+        var iframe = win.document.createElement('iframe');
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.margin = '0';
+        iframe.src = url;
+        win.document.body.appendChild(iframe);
+    }
+    document.getElementById('big-button').style.background = 'grey';
+    document.getElementById('big-button').innerHTML = "Play Now";
+};
+
+document.getElementById('small-button').onclick = function() {
+    var urlInput = document.getElementById('urlInput');
+    if (urlInput.style.display === 'none') {
+        urlInput.style.display = 'block';
+        urlInput.focus();
+    } else {
+        var url = urlInput.value.trim();
+        if (url !== "") {
+            var win;
+            if (win) {
+                win.focus();
+            } else {
+                win = window.open();
+                win.document.body.style.margin = '0';
+                win.document.body.style.height = '100vh';
+                var iframe = win.document.createElement('iframe');
+                iframe.style.border = 'none';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.margin = '0';
+                iframe.src = url;
+                win.document.body.appendChild(iframe);
+            }
+            document.getElementById('small-button').style.background = 'grey';
+            document.getElementById('small-button').innerHTML = "Play Now";
+        } else {
+            alert("Please enter a valid URL");
+        }
+    }
+};
+</script>
+</body>
+</html>
